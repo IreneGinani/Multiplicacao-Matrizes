@@ -4,7 +4,8 @@
 import sys
 import argparse
 
-from reader import read
+from util import read, write
+from sequencial import seq_mult
 
 def main(argv): 
 	parser = argparse.ArgumentParser(description='Realiza a multiplicação de duas matrizes quadradas.')
@@ -20,10 +21,15 @@ def main(argv):
 
 	args = parser.parse_args() 
 
-	read(args.dimensao)
-	#print args.dimensao
-	#print args.algoritmo
-	#print args.experimento
+	mA, mB = read(args.dimensao) 
+
+	if args.algoritmo == 'S':
+		write(seq_mult(mA, mB))
+	elif args.algoritmo == 'C':
+		pass
+	
+	if args.experimento:
+		pass
 
 if __name__ == "__main__":
    main(sys.argv[1:])

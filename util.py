@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import pickle
+
 def read(dimensao):
 	""" Metodo para ler arquivos das matrizes para serem multiplicadas.
     
@@ -26,6 +28,10 @@ def read(dimensao):
 	return mA, mB
 
 	
+def write(matrix): 
+	file_name = 'output/C{0}x{0}.txt'.format(len(matrix))
+	file = open(file_name, 'wb')
+	[file.write(" ".join(map(str, line)) + "\n") for line in matrix] 
 
 
 
