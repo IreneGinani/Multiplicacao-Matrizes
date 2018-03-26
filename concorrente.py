@@ -45,4 +45,4 @@ def conc_mult(matrix_A, matrix_B):
     
     for t in threads: t.join()
     
-    print matrix_c     
+    return matrix_c     
