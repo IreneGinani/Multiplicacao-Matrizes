@@ -28,8 +28,8 @@ def read(dimensao):
 	return mA, mB
 
 	
-def write(matrix): 
-	file_name = 'output/C{0}x{0}.txt'.format(len(matrix))
+def write(flag, matrix): 
+	file_name = 'output/{0}/C{1}x{1}.txt'.format(flag, len(matrix))
 	file = open(file_name, 'wb')
 	[file.write(" ".join(map(str, line)) + "\n") for line in matrix] 
 
