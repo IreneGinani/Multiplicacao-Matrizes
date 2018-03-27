@@ -25,17 +25,32 @@ def main(argv):
 	
 	if args.experimento:
 		d = 4
-		for dim in range(0, 10):
+		for dim in range(0, 4):
 			mA, mB = read(d) 
-			write(seq_mult(mA, mB))
+			write('S', seq_mult(mA, mB))
+			write('C', conc_mult(mA, mB))  
 			d = d * 2
 	else:
+		error = []
+		if args.dimensao % 2 != 0 or args.dimensao < 4 or args.dimensao > 1024:
+			error.append("ERROR: valor %s inválido para dimensão" % args.dimensao)
+			 
+		if not args.dimensao:
+			error.append("ERROR: é necessário valor para dimensão")
+			 
+		if not args.algoritmo:
+			error.append("ERROR: é necessário identificar o algoritmo") 
+
+		if error: 
+			for e in error: print e
+			sys.exit(1)
+
 		mA, mB = read(args.dimensao) 
 
 		if args.algoritmo == 'S':
-			write(seq_mult(mA, mB))
+			write('S', seq_mult(mA, mB))
 		elif args.algoritmo == 'C':
-			conc_mult(mA, mB)
+			write('C', conc_mult(mA, mB))  
 
 if __name__ == "__main__":
    main(sys.argv[1:])
