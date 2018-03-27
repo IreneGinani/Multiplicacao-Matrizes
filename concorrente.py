@@ -1,6 +1,8 @@
 #!/usr/bin/python
  
 import threading
+from threading import Lock
+lock = Lock()
 import time
  
 matrix_a = None
@@ -18,13 +20,14 @@ class ThreadMatrix(threading.Thread):
     	print "Starting " + self.name + "\n"
 
         vector_a = [matrix_a[i][self.id] for i in range(len(matrix_a))]
-        vector_b = [matrix_b[self.id][j] for j in range(len(matrix_b[self.id]))]
-        # matrix_c_aux = [[0 for x in range(len(matrix_a))] for y in range(len(matrix_a))]
+        vector_b = [matrix_b[self.id][j] for j in range(len(matrix_b[self.id]))] 
 
         for i in range(0, len(matrix_a)):
             for j in range(0, len(matrix_b)):
                 sum_ = vector_a[i] * vector_b[j] 
+                lock.acquire()
                 matrix_c[i][j] += sum_
+                lock.release()
 
         print "End " + self.name + "\n"
 	
