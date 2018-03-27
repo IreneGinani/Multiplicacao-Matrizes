@@ -4,10 +4,7 @@
 import time
 
 def seq_mult(matrix_A, matrix_B): 
-	start = int(round(time.time() * 1000))
-
 	size = len(matrix_A)  
-
 	matrix_C = [[0 for x in range(size)] for y in range(size)] 
 	
 	for i in range(0, size):
@@ -16,7 +13,4 @@ def seq_mult(matrix_A, matrix_B):
 			for k in range(0, size):  
 				soma += matrix_A[i][k] * matrix_B[k][j]
 			matrix_C[i][j] = soma 
-
-	print("Execution Time --->", (int(round(time.time() * 1000)) - start))
-
 	return matrix_C

@@ -116,3 +116,6 @@ Como vemos na saida do comando, é possivel usar alguns argumentos no comando. P
 Para identificar o algoritmo que você gostaria de usar, o argumento deve ser `--algoritmo S|C`, com S ou C sendo os identificadores para o algoritmo Sequencial ou Concorrente, respectivamente. Por fim, para rodar o experimento com todas as matrizes, use o argumento `--experimento N`.
 
 A saida das matrizes estará na pasta `output/`, caso o código processado seja sequêncial, estará em `output/S/`, caso seja concorrente estará em `output/C/`.
+
+
+

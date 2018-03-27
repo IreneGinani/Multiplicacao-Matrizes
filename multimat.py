@@ -3,6 +3,7 @@
 
 import sys
 import argparse
+import time
 
 from util import read, write
 from sequencial import seq_mult
@@ -25,11 +26,19 @@ def main(argv):
 	
 	if args.experimento:
 		d = 4
-		for dim in range(0, 4):
+		time_total = 0
+		for e in range(0, 20):
 			mA, mB = read(d) 
-			write('S', seq_mult(mA, mB))
-			write('C', conc_mult(mA, mB))  
 			d = d * 2
+
+			start = int(round(time.time() * 1000))
+			seq_mult(mA, mB)
+			time_total += (int(round(time.time() * 1000)) - start)
+
+		time_m = time_total/20
+		print(time_m)
+
+		#write('C', conc_mult(mA, mB))
 	else:
 		error = []
 		if args.dimensao % 2 != 0 or args.dimensao < 4 or args.dimensao > 1024:

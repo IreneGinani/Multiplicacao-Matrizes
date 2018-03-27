@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import pickle
-
 def read(dimensao):
 	""" Metodo para ler arquivos das matrizes para serem multiplicadas.
     
