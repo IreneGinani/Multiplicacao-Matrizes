@@ -39,7 +39,7 @@ def main(argv):
 				time_total += time.time() - start
 
 			time_m = time_total/20
-			print(str(time_m) + "s")
+			print(str(time_m) + "s na matriz de ordem "+ str(d))
 
 		#write('C', conc_mult(mA, mB))
 	else:
