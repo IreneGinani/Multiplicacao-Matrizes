@@ -27,19 +27,30 @@ def main(argv):
 	if args.experimento:
 		d = 4
 		time_total = 0
+		time_max = -1
+		time_min = float("inf")
 
-		for e in range(0, 10):
+		for e in range(0, 2):
 			mA, mB = read(d) 
 			d = d * 2
 			
-			for i in xrange(0,20):
+			for i in xrange(0,5):
 			
 				start = time.time()
 				seq_mult(mA, mB)
-				time_total += time.time() - start
+				time_inst = time.time() - start
+				
+				if (time_inst <= time_min):
+					time_min = time_inst
+				if (time_inst >= time_max):
+					time_max = time_inst
+				
+				time_total += time_inst
 
 			time_m = time_total/20
 			print(str(time_m) + "s na matriz de ordem "+ str(d))
+			print("Maior tempo de execução foi: "+str(time_max))
+			print("Menor tempo de execução foi: "+str(time_min))
 
 		#write('C', conc_mult(mA, mB))
 	else:
