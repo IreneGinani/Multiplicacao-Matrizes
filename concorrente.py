@@ -14,17 +14,17 @@ class ThreadMatrix(threading.Thread):
         self.name = name 
 
     def run(self): 
-        global layers, matrix_c
+        global matrix_c
     	print "Starting " + self.name + "\n"
 
         vector_a = [matrix_a[i][self.id] for i in range(len(matrix_a))]
         vector_b = [matrix_b[self.id][j] for j in range(len(matrix_b[self.id]))]
-        matrix_c_aux = [[0 for x in range(len(matrix_a))] for y in range(len(matrix_a))]
+        # matrix_c_aux = [[0 for x in range(len(matrix_a))] for y in range(len(matrix_a))]
 
         for i in range(0, len(matrix_a)):
             for j in range(0, len(matrix_b)):
-                matrix_c_aux[i][j] = vector_a[i] * vector_b[j] 
-                matrix_c[i][j] += matrix_c_aux[i][j]
+                sum_ = vector_a[i] * vector_b[j] 
+                matrix_c[i][j] += sum_
 
         print "End " + self.name + "\n"
 	
