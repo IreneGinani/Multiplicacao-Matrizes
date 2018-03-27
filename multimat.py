@@ -27,16 +27,19 @@ def main(argv):
 	if args.experimento:
 		d = 4
 		time_total = 0
-		for e in range(0, 20):
+
+		for e in range(0, 10):
 			mA, mB = read(d) 
 			d = d * 2
+			
+			for i in xrange(0,20):
+			
+				start = time.time()
+				seq_mult(mA, mB)
+				time_total += time.time() - start
 
-			start = int(round(time.time() * 1000))
-			seq_mult(mA, mB)
-			time_total += (int(round(time.time() * 1000)) - start)
-
-		time_m = time_total/20
-		print(time_m)
+			time_m = time_total/20
+			print(str(time_m) + "s")
 
 		#write('C', conc_mult(mA, mB))
 	else:
