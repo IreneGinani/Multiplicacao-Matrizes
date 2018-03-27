@@ -14,8 +14,8 @@ def read(dimensao):
 	matriz_vetor = []
 	contador = 0
 
-	matrix_a_path = "input/A{0}x{0}.txt".format(dimensao)
-	matrix_b_path = "input/B{0}x{0}.txt".format(dimensao)
+	matrix_a_path = "Matrizes/A{0}x{0}.txt".format(dimensao)
+	matrix_b_path = "Matrizes/B{0}x{0}.txt".format(dimensao)
 
 	matrix_a_file = open(matrix_a_path, 'r')
 	matrix_b_file = open(matrix_b_path, 'r')
