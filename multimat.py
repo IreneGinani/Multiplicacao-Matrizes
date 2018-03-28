@@ -5,10 +5,14 @@ import sys
 import argparse
 import time
 import math
+import logging
+logging.basicConfig(filename='seq.log',level=logging.DEBUG)
 
 from util import read, write
 from sequencial import seq_mult
 from concorrente import conc_mult
+
+import numpy as np
 
 def variancia(valores, media):
 	""" Metodo para efetuar a variância do conjunto de valores passados como argumento.
@@ -61,35 +65,69 @@ def main(argv):
 	if args.experimento:
 		d = 4
 		time_total = 0
-		time_max = -1
-		time_min = float("inf")
 		valores = []
 
-		for e in range(0, 10):
+		logging.info("SEQ")
+
+		for e in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+			time_max = -1
+			time_min = -1
+
 			mA, mB = read(d) 
 			d = d * 2
-			
-			for i in xrange(0,20):
-			
-				start = time.time()
-				conc_mult(mA, mB)
-				time_inst = time.time() - start
-				
-				if (time_inst <= time_min):
+
+			for i in [0]:
+				print e, i
+				start_time = time.clock()
+				seq_mult(mA, mB)
+				time_inst = time.clock() - start_time
+
+				if (time_inst <= time_min or time_min == -1):
 					time_min = time_inst
 				if (time_inst >= time_max):
 					time_max = time_inst
+
+				#print str(time_inst) + " seconds", time_min, time_max 
 				
 				time_total += time_inst
 				valores.append(time_inst)
 
 			time_m = time_total/20
-			print("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d/2))
-			print("Maior tempo de execução foi: "+str(time_max) + "s")
-			print("Menor tempo de execução foi: "+str(time_min) + "s")
-			print ("O desvio padrão é de: " + str(desvio_padrao(valores,time_m)) + "s")
+			logging.info("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d/2))
+			logging.info("Maior tempo de execução foi: "+str(time_max) + "s")
+			logging.info("Menor tempo de execução foi: "+str(time_min) + "s")
+			logging.info("O desvio padrão é de: " + str(desvio_padrao(valores,time_m)) + "s")
 
-		#write('C', conc_mult(mA, mB))
+		logging.info("CONC")
+
+		for e in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+			time_max = -1
+			time_min = -1
+
+			mA, mB = read(d) 
+			d = d * 2
+
+			for i in [0]:
+				print e, i
+				start_time = time.clock()
+				conc_mult(mA, mB)
+				time_inst = time.clock() - start_time
+
+				if (time_inst <= time_min or time_min == -1):
+					time_min = time_inst
+				if (time_inst >= time_max):
+					time_max = time_inst
+ 
+				time_total += time_inst
+				valores.append(time_inst)
+
+			time_m = time_total/20
+			logging.info("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d/2))
+			logging.info("Maior tempo de execução foi: "+str(time_max) + "s")
+			logging.info("Menor tempo de execução foi: "+str(time_min) + "s")
+			logging.info("O desvio padrão é de: " + str(desvio_padrao(valores,time_m)) + "s")
+
+		#
 	else:
 		error = []
 		if args.dimensao % 2 != 0 or args.dimensao < 4 or args.dimensao > 1024:

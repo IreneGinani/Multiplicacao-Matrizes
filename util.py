@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import numpy as np
+
 def read(dimensao):
 	""" Metodo para ler arquivos das matrizes para serem multiplicadas.
     
@@ -15,14 +17,9 @@ def read(dimensao):
 	matrix_a_path = "Matrizes/A{0}x{0}.txt".format(dimensao)
 	matrix_b_path = "Matrizes/B{0}x{0}.txt".format(dimensao)
 
-	matrix_a_file = open(matrix_a_path, 'r')
-	matrix_b_file = open(matrix_b_path, 'r')
+	mA = np.loadtxt(matrix_a_path, skiprows=1)
+	mB = np.loadtxt(matrix_b_path, skiprows=1)
 
-	matrix_a = matrix_a_file.readlines()[1:]
-	matrix_b = matrix_b_file.readlines()[1:]
-
-	mA = [map(int, l.strip('\n').strip(' ').split(' ')) for l in matrix_a]
-	mB = [map(int, l.strip('\n').strip(' ').split(' ')) for l in matrix_b]
 	return mA, mB
 
 	
@@ -38,5 +35,7 @@ def write(flag, matrix):
 	[file.write(" ".join(map(str, line)) + "\n") for line in matrix] 
 
 
+if __name__ == '__main__':
+	read(2048)
 
 

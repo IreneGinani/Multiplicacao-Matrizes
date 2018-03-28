@@ -1,0 +1,25 @@
+INFO:root:SEQ
+INFO:root:A média de execução é de: 2.9e-06s na matriz de ordem 4
+INFO:root:Maior tempo de execução foi: 5.8e-05s
+INFO:root:Menor tempo de execução foi: 5.8e-05s
+INFO:root:O desvio padrão é de: 5.51e-05s
+INFO:root:A média de execução é de: 1.86e-05s na matriz de ordem 8
+INFO:root:Maior tempo de execução foi: 0.000314s
+INFO:root:Menor tempo de execução foi: 0.000314s
+INFO:root:O desvio padrão é de: 2.78600071788e-05s
+INFO:root:A média de execução é de: 0.0001241s na matriz de ordem 16
+INFO:root:Maior tempo de execução foi: 0.00211s
+INFO:root:Menor tempo de execução foi: 0.00211s
+INFO:root:O desvio padrão é de: 3.81628527934e-05s
+INFO:root:A média de execução é de: 0.0007908s na matriz de ordem 32
+INFO:root:Maior tempo de execução foi: 0.013334s
+INFO:root:Menor tempo de execução foi: 0.013334s
+INFO:root:O desvio padrão é de: 0.0003664s
+INFO:root:A média de execução é de: 0.00648975s na matriz de ordem 64
+INFO:root:Maior tempo de execução foi: 0.113979s
+INFO:root:Menor tempo de execução foi: 0.113979s
+INFO:root:O desvio padrão é de: 0.00287636604286s
+INFO:root:A média de execução é de: 0.0510508s na matriz de ordem 128
+INFO:root:Maior tempo de execução foi: 0.891221s
+INFO:root:Menor tempo de execução foi: 0.891221s
+INFO:root:O desvio padrão é de: 0.020817723426s
