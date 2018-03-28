@@ -27,6 +27,12 @@ def read(dimensao):
 
 	
 def write(flag, matrix): 
+	""" Metodo para escrever em arquivos as matrizes resultantes da multiplicação.
+    
+    @param matrix: matriz que será gravada no arquivo.
+    @param flag: ficará no início do arquivo, para que seja o nome do arquivo e depois a dimensão da matriz gerada
+
+    """ 
 	file_name = 'output/{0}/C{1}x{1}.txt'.format(flag, len(matrix))
 	file = open(file_name, 'wb')
 	[file.write(" ".join(map(str, line)) + "\n") for line in matrix] 

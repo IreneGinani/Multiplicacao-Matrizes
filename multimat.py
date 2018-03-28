@@ -4,10 +4,23 @@
 import sys
 import argparse
 import time
+import math
 
 from util import read, write
 from sequencial import seq_mult
 from concorrente import conc_mult
+
+def variancia(valores, media):
+	soma = 0
+	variancia = 0
+	for valor in valores:
+		soma += math.pow( (valor - media), 2)
+		variancia = soma / float( len(valores) )
+		return variancia
+ 
+ 
+def desvio_padrao(valores, media):
+	return math.sqrt( variancia(valores,media) )
 
 def main(argv): 
 	parser = argparse.ArgumentParser(description='Realiza a multiplicação de duas matrizes quadradas.')
@@ -29,12 +42,13 @@ def main(argv):
 		time_total = 0
 		time_max = -1
 		time_min = float("inf")
+		valores = []
 
-		for e in range(0, 2):
+		for e in range(0, 10):
 			mA, mB = read(d) 
 			d = d * 2
 			
-			for i in xrange(0,5):
+			for i in xrange(0,20):
 			
 				start = time.time()
 				seq_mult(mA, mB)
@@ -46,11 +60,13 @@ def main(argv):
 					time_max = time_inst
 				
 				time_total += time_inst
+				valores.append(time_inst)
 
 			time_m = time_total/20
-			print(str(time_m) + "s na matriz de ordem "+ str(d))
-			print("Maior tempo de execução foi: "+str(time_max))
-			print("Menor tempo de execução foi: "+str(time_min))
+			print("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d))
+			print("Maior tempo de execução foi: "+str(time_max) + "s")
+			print("Menor tempo de execução foi: "+str(time_min) + "s")
+			print ("O desvio padrão é de: " + str(desvio_padrao(valores,time_m)) + "s")
 
 		#write('C', conc_mult(mA, mB))
 	else:
