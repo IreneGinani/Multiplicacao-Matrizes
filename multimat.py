@@ -72,7 +72,7 @@ def main(argv):
 			for i in xrange(0,20):
 			
 				start = time.time()
-				seq_mult(mA, mB)
+				conc_mult(mA, mB)
 				time_inst = time.time() - start
 				
 				if (time_inst <= time_min):
@@ -84,7 +84,7 @@ def main(argv):
 				valores.append(time_inst)
 
 			time_m = time_total/20
-			print("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d))
+			print("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d/2))
 			print("Maior tempo de execução foi: "+str(time_max) + "s")
 			print("Menor tempo de execução foi: "+str(time_min) + "s")
 			print ("O desvio padrão é de: " + str(desvio_padrao(valores,time_m)) + "s")

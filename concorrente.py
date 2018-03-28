@@ -21,7 +21,7 @@ class ThreadMatrix(threading.Thread):
 
     def run(self): 
         global matrix_c
-    	print "Starting " + self.name + "\n"
+    	#print "Starting " + self.name + "\n"
 
         vector_a = [matrix_a[i][self.id] for i in range(len(matrix_a))]
         vector_b = [matrix_b[self.id][j] for j in range(len(matrix_b[self.id]))] 
@@ -33,7 +33,7 @@ class ThreadMatrix(threading.Thread):
                 matrix_c[i][j] += sum_
                 lock.release()
 
-        print "End " + self.name + "\n"
+        #print "End " + self.name + "\n"
 	
   
 def conc_mult(matrix_A, matrix_B):
