@@ -10,6 +10,9 @@ matrix_b = None
 matrix_c = None 
 
 class ThreadMatrix(threading.Thread):
+    """ Metodo para criar e matar as threads que serão usadas no cálculo da multiplicação de matrizes e representarão cada linha da matriz final.
+    
+    """ 
     def __init__(self, id, name):
         threading.Thread.__init__(self)
         self.id = id
@@ -33,6 +36,13 @@ class ThreadMatrix(threading.Thread):
 	
   
 def conc_mult(matrix_A, matrix_B):
+    """ Metodo para efetuar a multiplicação entre duas matrizes de forma concorrente.
+    
+    @param matrix_A: matriz A que será multiplicada pela B.
+    @param matrix_B: matriz B que será multiplicada pela A.
+
+    @return matrix_c: matriz resultante da multiplicação dos dois parâmetros de entrada
+    """ 
     global matrix_c_aux, matrix_a, matrix_b, matrix_c
     size = len(matrix_A)
 

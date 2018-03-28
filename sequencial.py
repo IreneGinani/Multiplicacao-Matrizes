@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import time
 
 def seq_mult(matrix_A, matrix_B): 
+	""" Metodo para efetuar a multiplicação entre duas matrizes de forma sequencial.
+    
+    @param matrix_A: matriz A que será multiplicada pela B.
+    @param matrix_B: matriz B que será multiplicada pela A.
+
+    @return matrix_c: matriz resultante da multiplicação dos dois parâmetros de entrada
+    """ 
 	size = len(matrix_A)  
 	matrix_C = [[0 for x in range(size)] for y in range(size)] 
 	
