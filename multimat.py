@@ -1,20 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
- ****************************************************************************
- * Copyright (C) 2018 by Irene e Gabriela                                   *
- *                                                                          *
- * Este arquivo é  o arquivo principal do trabalho de multiplicação de      *
- * matrizes, onde o objetivo é realizar uma experimentação com a operação de*
- * multiplicação de matrizes comparando o desempenho de dois algoritmos um  *
- * sequencial e outro concorrente.                                          *
- ****************************************************************************/
-
- * @file doxygen_c.h
- * @author Irene Ginani e Gabriela Cavalcante
- * @date 28 marc 2018
- * @brief O arquivo contém a chamada dos métodos de ler e calcular a multiplicação além da escrita da matriz resultante.
- """
 
 import sys
 import argparse
@@ -49,7 +34,7 @@ def desvio_padrao(valores, media):
 
     @return desvio_padrao: desvio_padrao dos valores
     """ 
-    desvio_padrao = math.sqrt( variancia(valores,media) )
+        desvio_padrao = math.sqrt( variancia(valores,media) )
 	return desvio_padrao
 
 def main(argv):
