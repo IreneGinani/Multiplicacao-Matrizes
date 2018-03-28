@@ -11,6 +11,13 @@ from sequencial import seq_mult
 from concorrente import conc_mult
 
 def variancia(valores, media):
+	""" Metodo para efetuar a variância do conjunto de valores passados como argumento.
+    
+    @param valores: vetor o qual se deseja obter a variância.
+    @param media: media dos valores passados por parâmetro
+
+    @return variancia: variância dos valores
+    """ 
 	soma = 0
 	variancia = 0
 	for valor in valores:
@@ -20,9 +27,23 @@ def variancia(valores, media):
  
  
 def desvio_padrao(valores, media):
-	return math.sqrt( variancia(valores,media) )
+	""" Metodo para efetuar o desvio padrão do conjunto de valores passados como argumento.
+    
+    @param valores: vetor o qual se deseja obter o desvio padrão.
+    @param media: media dos valores passados por parâmetro
 
-def main(argv): 
+    @return desvio_padrao: desvio_padrao dos valores
+    """ 
+    desvio_padrao = math.sqrt( variancia(valores,media) )
+	return desvio_padrao
+
+def main(argv):
+
+	""" Metodo main que executa a ação principal de multiplicar as duas matrizes, a partir da flag dada na linha de comando iremos usar um método diferente para multiplicar.
+    
+    @param argv: flags que direcionam o calculo da multiplicação (se será sequencial, concorrrente ou o experimento.
+
+    """  
 	parser = argparse.ArgumentParser(description='Realiza a multiplicação de duas matrizes quadradas.')
 	parser.add_argument('--dimensao', 
 						metavar='N', 
