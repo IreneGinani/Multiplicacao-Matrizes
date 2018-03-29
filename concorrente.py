@@ -1,40 +1,33 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
  
-import threading
-from multiprocessing import Process
+import threading 
 from threading import Lock
 lock = Lock()
 import time, numpy
- 
-matrix_a = None
-matrix_b = None
-matrix_c = None 
+  
+matrix_c = None   
 
 class ThreadMatrix(threading.Thread):
-    """ Metodo para criar e matar as threads que serão usadas no cálculo da multiplicação de matrizes e representarão cada linha da matriz final.
-    
     """ 
-    def __init__(self, id, name):
+        Metodo para criar e matar as threads que serão usadas no cálculo da 
+        multiplicação de matrizes e representarão cada linha da matriz final.
+    """ 
+    def __init__(self, id, size, vector_a, vector_b):
         threading.Thread.__init__(self)
         self.id = id
-        self.name = name 
+        self.size = int(size) 
+        self.vector_a = vector_a
+        self.vector_b = vector_b
 
-    def run(self): 
-        global matrix_c 
-
-        vector_a = matrix_a[:,[self.id]] # matrix_a[i][self.id] # for i in range(len(matrix_a))]
-        vector_b = matrix_b[self.id]# [j] for j in range(len(matrix_b[self.id]))] 
-
-        for i in range(0, len(matrix_a)):
-            for j in range(0, len(matrix_b)):
-                sum_ = vector_a[i] * vector_b[j] 
-                #lock.acquire()
-               # time.sleep(1)
+    def run(self):   
+        for i in range(0, self.size):
+            for j in range(0, self.size):
+                sum_ = self.vector_a[i] * self.vector_b[j]    
+                lock.acquire()
                 matrix_c[i][j] += sum_
-                #lock.release()
-	 
-  
+                lock.release() 
+
 def conc_mult(matrix_A, matrix_B):
     """ Metodo para efetuar a multiplicação entre duas matrizes de forma concorrente.
     
@@ -43,17 +36,17 @@ def conc_mult(matrix_A, matrix_B):
 
     @return matrix_c: matriz resultante da multiplicação dos dois parâmetros de entrada
     """ 
-    global matrix_c_aux, matrix_a, matrix_b, matrix_c
-    size = len(matrix_A)
+    global matrix_c
+    size = len(matrix_A) 
 
-    matrix_a = matrix_A
-    matrix_b = matrix_B
-    matrix_c = numpy.zeros(shape=(size,size)) 
+    matrix_c = numpy.zeros(shape=(size,size))  
 
     threads = []
-    for thread in range(size):
-    	t = ThreadMatrix(thread, "thread %d" % (thread))
+    for thread_id in range(size):
+    	t = ThreadMatrix(thread_id, size, matrix_A[:,[thread_id]], matrix_B[thread_id])
     	threads.append(t)
         t.start() 
-    
-    return matrix_c     
+
+    for t in threads: t.join()
+ 
+    return matrix_c
