@@ -12,4 +12,3 @@ float desv(float* times, int size, float media) {
 	float desvio = sqrt(var(times, size, media));
 	return desvio;
 }
-

@@ -47,16 +47,26 @@ int main(int argc, char* argv[])
             multiply(matrix_r, matrix_a, matrix_b); 
             printf("Time taken: %.6fs\n", (float)(clock() - tStart)/CLOCKS_PER_SEC);
         } else {
-            int threads_number = dim * dim;
+            int threads_number = dim ;
             std::thread threads[threads_number];
 
             clock_t tStart = clock();
 
-            int row = 0;
-            for (int col = 0; col < threads_number; ++col) {  
-                threads[col] = std::thread(multiply_threading, ref(matrix_r), row, col%dim, ref(matrix_a), ref(matrix_b));
-                if ((col+1) % dim == 0 && col != 0)
-                    row += 1;
+            //int row = 0;
+            for (int t = 0; t < threads_number; ++t) { 
+                int* va = *(matrix_a.data + t);
+                int* vb = matrix_b.data[t];
+                threads[t] = std::thread(multiply_threading2, ref(matrix_r), va, vb);
+
+                /*for (int i = 0; i < threads_number; ++i)
+                    cout << "b " << matrix_b.data[t][i] << endl;
+                     
+                for (int i = 0; i < threads_number; ++i)
+                    cout << "a " << *(matrix_a.data + t)[i] << endl;
+                */
+            // matrix_A[:,[thread_id]], matrix_B[thread_id]
+                //sum_ = vector_a[i] * vector_b[j]
+            //    
             } 
             for (int i = 0; i < threads_number; ++i) { 
                 threads[i].join();
@@ -80,51 +90,78 @@ int main(int argc, char* argv[])
             float total_time = 0;
             float time_min = 100;
             float time_max = -1;
-            for (int i = 0; i < n_experimentos; ++i) { 
-                stringstream file_matrix_a;
-                file_matrix_a << "../Matrizes/A" << dim << "x" << dim << ".txt";
-                stringstream file_matrix_b;
-                file_matrix_b << "../Matrizes/B" << dim << "x" << dim << ".txt";
- 
-                matrix matrix_a, matrix_b, matrix_r;
-                matrix_a.dimension = dim;
-                matrix_a.initialize(); 
- 
-                matrix_b.dimension = dim;
-                matrix_b.initialize(); 
- 
-                matrix_r.dimension = dim;
-                matrix_r.initialize(); 
-          
-                read(matrix_a, file_matrix_a.str());
-                read(matrix_b, file_matrix_b.str());
 
-                clock_t tStart = clock();
-                multiply(matrix_r, matrix_a, matrix_b); 
-                float tEnd = (float)(clock() - tStart)/CLOCKS_PER_SEC;
+            stringstream file_matrix_a;
+            file_matrix_a << "../Matrizes/A" << dim << "x" << dim << ".txt";
+            stringstream file_matrix_b;
+            file_matrix_b << "../Matrizes/B" << dim << "x" << dim << ".txt";
 
-                if (tEnd < time_min) {
-                    time_min = tEnd; 
+            matrix matrix_a, matrix_b, matrix_r;
+            matrix_a.dimension = dim;
+            matrix_a.initialize(); 
+
+            matrix_b.dimension = dim;
+            matrix_b.initialize(); 
+
+            matrix_r.dimension = dim;
+            matrix_r.initialize(); 
+      
+            read(matrix_a, file_matrix_a.str());
+            read(matrix_b, file_matrix_b.str());
+            float tEnd = 0;
+
+            for (int alg = 0; alg < 2; ++alg) {
+                for (int i = 0; i < n_experimentos; ++i) { 
+                    clock_t tStart = clock();
+                    if (alg == 0) {
+                        multiply(matrix_r, matrix_a, matrix_b); 
+                        tEnd = (float)(clock() - tStart)/CLOCKS_PER_SEC;
+                    } else {
+                        int threads_number = dim * dim;
+                        std::thread threads[threads_number];
+
+                        clock_t tStart = clock();
+
+                        //int row = 0;
+                        for (int t = 0; t < threads_number; ++t) {  
+                            cout <<  matrix_b.data[t] << endl;
+                        // matrix_A[:,[thread_id]], matrix_B[thread_id]
+                        //    threads[col] = std::thread(multiply_threading2, matrix_a.data[t][0], matrix_b.data[t]);
+                        } 
+                        for (int i = 0; i < threads_number; ++i) { 
+                            threads[i].join();
+                        }
+                        tEnd = (float)(clock() - tStart)/CLOCKS_PER_SEC;
+                    }
+
+                    if (tEnd < time_min) {
+                        time_min = tEnd; 
+                    }
+                    if (tEnd > time_max) {
+                        time_max = tEnd;
+                    }
+
+                    times[i] = tEnd;
+                    total_time += tEnd;
+                } 
+
+                if (alg == 0) {
+                    printf("ALGO: %s\n", "SEQUENCIAL"); 
+                } else {
+                    printf("ALGO: %s\n", "CONCORRENTE");
                 }
-                if (tEnd > time_max) {
-                    time_max = tEnd;
-                }
+                printf("Time total to matrix %dx%d: %.6fs\n", dim, dim, total_time);
+                printf("Time min to matrix %dx%d: %.6fs\n", dim, dim, time_min);
+                printf("Time max to matrix %dx%d: %.6fs\n", dim, dim, time_max);
 
-                times[i] = tEnd;
-                total_time += tEnd;
+                float time_m = total_time/n_experimentos; 
+                printf("Time medio %dx%d: %.6fs\n", dim, dim, time_m);
+
+                float desvio = desv(times, n_experimentos, time_m);
+                printf("Desvio Padrão %dx%d: %.6fs\n", dim, dim, desvio);
+
+                printf("----------\n");
             }
- 
-            printf("Time total to matrix %dx%d: %.6fs\n", dim, dim, total_time);
-            printf("Time min to matrix %dx%d: %.6fs\n", dim, dim, time_min);
-            printf("Time max to matrix %dx%d: %.6fs\n", dim, dim, time_max);
-
-            float time_m = total_time/n_experimentos; 
-            printf("Time medio %dx%d: %.6fs\n", dim, dim, time_m);
-
-            float desvio = desv(times, n_experimentos, time_m);
-            printf("Desvio Padrão %dx%d: %.6fs\n", dim, dim, desvio);
-
-            printf("----------\n");
             dim = dim * 2;
         }
     }
