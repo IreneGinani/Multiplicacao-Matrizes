@@ -9,11 +9,12 @@
 
 #include "util.h"
 #include "multiply.h"
-#include "calc.h"
+#include "calc.h" 
+#include "matrix_struct.h"
 #include "multiply_thread.h"
-#include "matrix.h"
 
 using namespace std;
+
 
 int main(int argc, char* argv[])
 {   
@@ -21,57 +22,51 @@ int main(int argc, char* argv[])
         int dim = atoi(argv[1]);
         char algorithm = *argv[2];
 
-        stringstream file_matrix_A;
-        file_matrix_A << "../Matrizes/A" << dim << "x" << dim << ".txt";
-        stringstream file_matrix_B;
-        file_matrix_B << "../Matrizes/B" << dim << "x" << dim << ".txt";
+        stringstream file_matrix_a;
+        file_matrix_a << "../Matrizes/A" << dim << "x" << dim << ".txt";
+        stringstream file_matrix_b;
+        file_matrix_b << "../Matrizes/B" << dim << "x" << dim << ".txt";
 
-        Matrix mA = {}
+        matrix matrix_a;
+        matrix_a.dimension = dim;
+        matrix_a.initialize();  
 
-        int ** matrix_A = new int*[dim];
-        int ** matrix_B = new int*[dim];
-        int ** matrix_r = new int*[dim];
-     
-        for (int i = 0; i < dim; ++i) {
-            matrix_A[i] = new int[dim];
-            matrix_B[i] = new int[dim];
-            matrix_r[i] = new int[dim];
-            for (int j = 0; j < dim; ++j) {
-                matrix_A[i][j] = 0;
-                matrix_B[i][j] = 0;
-                matrix_r[i][j] = 0;
-            }
-        }
+        matrix matrix_b;
+        matrix_b.dimension = dim;
+        matrix_b.initialize();  
 
-        read(dim, matrix_A, file_matrix_A.str());
-        read(dim, matrix_B, file_matrix_B.str());
+        matrix matrix_r;
+        matrix_r.dimension = dim;
+        matrix_r.initialize(); 
+  
+        read(matrix_a, file_matrix_a.str()); 
+        read(matrix_b, file_matrix_b.str()); 
 
         if (algorithm == 'S') {
             clock_t tStart = clock();
-            multiply(dim, matrix_r, matrix_A, matrix_B); 
+            multiply(matrix_r, matrix_a, matrix_b); 
             printf("Time taken: %.6fs\n", (float)(clock() - tStart)/CLOCKS_PER_SEC);
         } else {
             int threads_number = dim * dim;
-            thread threads[threads_number];
+            std::thread threads[threads_number];
+
             clock_t tStart = clock();
 
-            for (int i = 0; i < dim; ++i) { 
-                for (int j = 0; j < dim; ++j) { 
-                    printf("%s\n", "OKKK");
-                    threads[i] = thread(printSomeValues, dim, matrix_r, i, j, matrix_A, matrix_B);
-                }
-            }
-
+            int row = 0;
+            for (int col = 0; col < threads_number; ++col) {  
+                threads[col] = std::thread(multiply_threading, ref(matrix_r), row, col%dim, ref(matrix_a), ref(matrix_b));
+                if ((col+1) % dim == 0 && col != 0)
+                    row += 1;
+            } 
             for (int i = 0; i < threads_number; ++i) { 
-                printf("%s\n", "OKKK 2");
                 threads[i].join();
             }
             printf("Time taken: %.6fs\n", (float)(clock() - tStart)/CLOCKS_PER_SEC);
         }
 
         stringstream file_output;
-        file_output << "output/" << algorithm << dim << "x" << dim << ".txt";
-        write(dim, matrix_r, file_output.str());
+        file_output << "output/" << algorithm << "/C" << dim << "x" << dim << ".txt";
+        write(matrix_r, file_output.str());
     } else {
         int dim = 4;
         int n_matrizes = 10;
@@ -86,31 +81,26 @@ int main(int argc, char* argv[])
             float time_min = 100;
             float time_max = -1;
             for (int i = 0; i < n_experimentos; ++i) { 
-                stringstream file_matrix_A;
-                file_matrix_A << "../Matrizes/A" << dim << "x" << dim << ".txt";
-                stringstream file_matrix_B;
-                file_matrix_B << "../Matrizes/B" << dim << "x" << dim << ".txt";
-
-                int ** matrix_A = new int*[dim];
-                int ** matrix_B = new int*[dim];
-                int ** matrix_r = new int*[dim];
-             
-                for (int i = 0; i < dim; ++i) {
-                    matrix_A[i] = new int[dim];
-                    matrix_B[i] = new int[dim];
-                    matrix_r[i] = new int[dim];
-                    for (int j = 0; j < dim; ++j) {
-                        matrix_A[i][j] = 0;
-                        matrix_B[i][j] = 0;
-                        matrix_r[i][j] = 0;
-                    }
-                }
-
-                read(dim, matrix_A, file_matrix_A.str());
-                read(dim, matrix_B, file_matrix_B.str());
+                stringstream file_matrix_a;
+                file_matrix_a << "../Matrizes/A" << dim << "x" << dim << ".txt";
+                stringstream file_matrix_b;
+                file_matrix_b << "../Matrizes/B" << dim << "x" << dim << ".txt";
+ 
+                matrix matrix_a, matrix_b, matrix_r;
+                matrix_a.dimension = dim;
+                matrix_a.initialize(); 
+ 
+                matrix_b.dimension = dim;
+                matrix_b.initialize(); 
+ 
+                matrix_r.dimension = dim;
+                matrix_r.initialize(); 
+          
+                read(matrix_a, file_matrix_a.str());
+                read(matrix_b, file_matrix_b.str());
 
                 clock_t tStart = clock();
-                multiply(dim, matrix_r, matrix_A, matrix_B); 
+                multiply(matrix_r, matrix_a, matrix_b); 
                 float tEnd = (float)(clock() - tStart)/CLOCKS_PER_SEC;
 
                 if (tEnd < time_min) {
