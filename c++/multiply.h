@@ -4,6 +4,12 @@
 
 #include "matrix_struct.h"
 
+/**
+    Método sequencial para calcular a multiplicação de matrizes.
+    - matrix_r: matriz resultante
+    - matrix_a: matriz A
+    - matrix_b: matriz B
+**/
 void multiply(matrix& matrix_r, matrix& matrix_a, matrix& matrix_b) {
     int result;
     for (int i = 0; i < matrix_r.dimension; ++i) {

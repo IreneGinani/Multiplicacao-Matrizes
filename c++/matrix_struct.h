@@ -2,6 +2,10 @@
 #define MATRIX_STRUCT
 #pragma once
 
+/**
+	Estrutura da matrix.
+	initialize(): metodo para inicializar uma matrix de uma dada dimensão com valores 0.
+**/
 typedef struct Matrix_Struct {
   int ** data; 
   int dimension;

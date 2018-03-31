@@ -8,6 +8,11 @@
 
 using namespace std;
 
+/**
+    Método que faz a leitura de um arquivos correspondente a uma matriz.
+    - m: matriz que será lida
+    - file: arquivo que deve ser lido
+**/
 void read(matrix m, string file) {
     ifstream f(file); 
 
@@ -21,6 +26,11 @@ void read(matrix m, string file) {
     f.close();
 } 
 
+/**
+    Método que faz a escrita em um arquivos correspondente a uma matriz.
+    - m: matriz que será lida
+    - file: arquivo que deve ser lido
+**/
 void write(matrix matrix, string file) {
     ofstream output(file); 
 
@@ -33,6 +43,10 @@ void write(matrix matrix, string file) {
     output.close();
 }  
 
+/**
+    Imprime uma dada matriz.
+    - m: matriz que deve ser impressa.
+**/
 void print(matrix m) {
     cout << endl;
     for (int i = 0; i < m.dimension; ++i) { 

@@ -51,22 +51,11 @@ int main(int argc, char* argv[])
             std::thread threads[threads_number];
 
             clock_t tStart = clock();
-
-            //int row = 0;
+ 
             for (int t = 0; t < threads_number; ++t) { 
                 int* va = *(matrix_a.data + t);
                 int* vb = matrix_b.data[t];
-                threads[t] = std::thread(multiply_threading2, ref(matrix_r), va, vb);
-
-                /*for (int i = 0; i < threads_number; ++i)
-                    cout << "b " << matrix_b.data[t][i] << endl;
-                     
-                for (int i = 0; i < threads_number; ++i)
-                    cout << "a " << *(matrix_a.data + t)[i] << endl;
-                */
-            // matrix_A[:,[thread_id]], matrix_B[thread_id]
-                //sum_ = vector_a[i] * vector_b[j]
-            //    
+                threads[t] = std::thread(multiply_threading_, ref(matrix_r), va, vb);
             } 
             for (int i = 0; i < threads_number; ++i) { 
                 threads[i].join();
@@ -111,22 +100,22 @@ int main(int argc, char* argv[])
             float tEnd = 0;
 
             for (int alg = 0; alg < 2; ++alg) {
+                total_time=0;
                 for (int i = 0; i < n_experimentos; ++i) { 
-                    clock_t tStart = clock();
                     if (alg == 0) {
+                        clock_t tStart = clock();
                         multiply(matrix_r, matrix_a, matrix_b); 
                         tEnd = (float)(clock() - tStart)/CLOCKS_PER_SEC;
                     } else {
-                        int threads_number = dim * dim;
+                        int threads_number = dim ;
                         std::thread threads[threads_number];
 
                         clock_t tStart = clock();
-
-                        //int row = 0;
-                        for (int t = 0; t < threads_number; ++t) {  
-                            cout <<  matrix_b.data[t] << endl;
-                        // matrix_A[:,[thread_id]], matrix_B[thread_id]
-                        //    threads[col] = std::thread(multiply_threading2, matrix_a.data[t][0], matrix_b.data[t]);
+             
+                        for (int t = 0; t < threads_number; ++t) { 
+                            int* va = *(matrix_a.data + t);
+                            int* vb = matrix_b.data[t];
+                            threads[t] = std::thread(multiply_threading_, ref(matrix_r), va, vb);
                         } 
                         for (int i = 0; i < threads_number; ++i) { 
                             threads[i].join();
