@@ -14,6 +14,8 @@ from concorrente import conc_mult
 
 import numpy as np
 
+mA, mB = None, None
+
 def variancia(valores, media):
 	""" Metodo para efetuar a variância do conjunto de valores passados como argumento.
     
@@ -42,7 +44,7 @@ def desvio_padrao(valores, media):
 	return desvio_padrao
 
 def main(argv):
-
+	global mA, mB
 	""" Metodo main que executa a ação principal de multiplicar as duas matrizes, a partir da flag dada na linha de comando iremos usar um método diferente para multiplicar.
     
     @param argv: flags que direcionam o calculo da multiplicação (se será sequencial, concorrrente ou o experimento.
@@ -63,21 +65,25 @@ def main(argv):
 	args = parser.parse_args() 
 	
 	if args.experimento:
-		d = 4
+		d = 2
 		time_total = 0
 		valores = []
 
-		logging.info("SEQ")
+		mAs = []
+		mBs = []
 
-		for e in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+		logging.info(" ----- SEQ ----- ")
+
+		for e in range(10):
 			time_max = -1
 			time_min = -1
 
-			mA, mB = read(d) 
 			d = d * 2
+			mA, mB = read(d) 
+			mAs.append(mA)
+			mBs.append(mB)
 
-			for i in [0]:
-				print e, i
+			for i in range(int(args.experimento)): 
 				start_time = time.clock()
 				seq_mult(mA, mB)
 				time_inst = time.clock() - start_time
@@ -86,51 +92,49 @@ def main(argv):
 					time_min = time_inst
 				if (time_inst >= time_max):
 					time_max = time_inst
-
-				#print str(time_inst) + " seconds", time_min, time_max 
 				
 				time_total += time_inst
 				valores.append(time_inst)
 
 			time_m = time_total/20
-			logging.info("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d/2))
+			logging.info("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d))
 			logging.info("Maior tempo de execução foi: "+str(time_max) + "s")
 			logging.info("Menor tempo de execução foi: "+str(time_min) + "s")
 			logging.info("O desvio padrão é de: " + str(desvio_padrao(valores,time_m)) + "s")
 
-		logging.info("CONC")
 
-		for e in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+		logging.info(" ----- CONC ----- ")
+
+		d = 2
+		for e in range(10):
 			time_max = -1
 			time_min = -1
 
-			mA, mB = read(d) 
 			d = d * 2
 
-			for i in [0]:
+			for i in range(int(args.experimento)): 
 				print e, i
 				start_time = time.clock()
-				conc_mult(mA, mB)
+				conc_mult(mAs[e], mBs[e])
 				time_inst = time.clock() - start_time
 
 				if (time_inst <= time_min or time_min == -1):
 					time_min = time_inst
 				if (time_inst >= time_max):
 					time_max = time_inst
- 
+
 				time_total += time_inst
 				valores.append(time_inst)
 
 			time_m = time_total/20
-			logging.info("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d/2))
+			logging.info("A média de execução é de: " + str(time_m) + "s na matriz de ordem "+ str(d))
 			logging.info("Maior tempo de execução foi: "+str(time_max) + "s")
 			logging.info("Menor tempo de execução foi: "+str(time_min) + "s")
 			logging.info("O desvio padrão é de: " + str(desvio_padrao(valores,time_m)) + "s")
 
-		#
 	else:
 		error = []
-		if args.dimensao % 2 != 0 or args.dimensao < 4 or args.dimensao > 1024:
+		if args.dimensao % 2 != 0 or args.dimensao < 4 or args.dimensao > 2048:
 			error.append("ERROR: valor %s inválido para dimensão" % args.dimensao)
 			 
 		if not args.dimensao:
@@ -146,9 +150,17 @@ def main(argv):
 		mA, mB = read(args.dimensao) 
 
 		if args.algoritmo == 'S':
-			write('S', seq_mult(mA, mB))
-		elif args.algoritmo == 'C':
-			write('C', conc_mult(mA, mB))  
+			start_time = time.clock()
+			m = seq_mult(mA, mB)
+			time_inst = time.clock() - start_time
+			print("time execution %s" % str(time_inst))
+			write('S', m)
+		elif args.algoritmo == 'C': 
+			start_time = time.clock()
+			m = conc_mult(mA, mB)
+			time_inst = time.clock() - start_time
+			print("time execution %s" % str(time_inst))
+			write('C', m)
 
 if __name__ == "__main__":
    main(sys.argv[1:])
