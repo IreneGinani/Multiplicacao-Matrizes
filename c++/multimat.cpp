@@ -133,12 +133,12 @@ int main(int argc, char* argv[])
                     times[i] = tEnd;
                     total_time += tEnd;
                 } 
-
-                if (alg == 0) {
+ 
+                if (alg == 0) { 
                     printf("ALGO: %s\n", "SEQUENCIAL"); 
-                } else {
+                } else { 
                     printf("ALGO: %s\n", "CONCORRENTE");
-                }
+                } 
                 printf("Time total to matrix %dx%d: %.6fs\n", dim, dim, total_time);
                 printf("Time min to matrix %dx%d: %.6fs\n", dim, dim, time_min);
                 printf("Time max to matrix %dx%d: %.6fs\n", dim, dim, time_max);
